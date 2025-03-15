@@ -26,7 +26,7 @@ public class RunRepositoryImpl implements RunRepository {
             record.getMiles()
     );
 
-    private final BiConsumer<Run, RunRecord> runRecordUnmapper = (run, runRecord) -> {
+    private final BiConsumer<Run, RunRecord> runRecordUnMapper = (run, runRecord) -> {
         runRecord.setTitle(run.title());
         runRecord.setStartedOn(run.startedOn());
         runRecord.setCompletedOn(run.completedOn());
@@ -50,7 +50,7 @@ public class RunRepositoryImpl implements RunRepository {
     @Override
     public Run create(Run run) {
         RunRecord runRecord = dslContext.newRecord(RUN);
-        runRecordUnmapper.accept(run, runRecord);
+        runRecordUnMapper.accept(run, runRecord);
         runRecord.store();
         return runMapper.map(runRecord);
     }
@@ -59,7 +59,7 @@ public class RunRepositoryImpl implements RunRepository {
     public Run update(Long id, Run run) {
         Optional<RunRecord> optionalRunRecord = dslContext.fetchOptional(RUN, RUN.ID.eq(id));
         RunRecord runRecord = optionalRunRecord.orElseThrow();
-        runRecordUnmapper.accept(run, runRecord);
+        runRecordUnMapper.accept(run, runRecord);
         runRecord.store();
         return runMapper.map(runRecord);
     }
